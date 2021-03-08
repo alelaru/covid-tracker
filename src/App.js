@@ -10,6 +10,7 @@ import { Component } from 'react';
 class App extends Component {
   state = {
     data : {},
+    country: "",
   }
 
   async componentDidMount(){
@@ -17,14 +18,25 @@ class App extends Component {
    this.setState({data: fetchedData})
   }
 
+  handlerCountryChange = async (country) => {
+        //Fetch the data
+    if(country === "global"){
+      country = "";
+    }
+    const fetchedData = await fetchData(country);
+        //set the state
+        console.log(country);
+    this.setState({data: fetchedData, country:country})
+  }
+
   render(){
-    const {data} = this.state;
+    const {data, country} = this.state;
 
     return (
       <div className={styles.container}>
           <Cards data={data}></Cards>
-          <CountryPicker></CountryPicker>
-          <Chart></Chart>
+          <CountryPicker handlerCountryChange={this.handlerCountryChange}></CountryPicker>
+          <Chart data={data} country={country}></Chart>
       </div>
     );
   }
